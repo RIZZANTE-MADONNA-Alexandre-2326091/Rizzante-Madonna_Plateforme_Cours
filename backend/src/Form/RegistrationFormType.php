@@ -5,12 +5,14 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class RegistrationFormType extends AbstractType
 {
@@ -33,7 +35,7 @@ class RegistrationFormType extends AbstractType
                     new NotBlank(null, 'Please enter a password'),
                     new Length(
                         null,
-                        6,
+                        8,
                         4096,
                         null,
                         null,
@@ -43,7 +45,13 @@ class RegistrationFormType extends AbstractType
                     ),
                 ],
             ])
-        ;
+            ->add('roleChoice', ChoiceType::class, [
+                'mapped' => false,
+                'choices' => ['Étudiant' => 'ROLE_STUDENT', 'Professeur' => 'ROLE_TEACHER'],
+                'constraints' => [
+                    new NotNull(null, 'Please select a role'),
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

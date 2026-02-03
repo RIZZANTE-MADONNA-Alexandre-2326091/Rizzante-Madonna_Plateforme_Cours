@@ -31,6 +31,7 @@ class LoginControllerTest extends WebTestCase
 
         $user = (new User())->setEmail('email@example.com');
         $user->setPassword($passwordHasher->hashPassword($user, 'password'));
+        $user->setRoles(['ROLE_USER']);
 
         $em->persist($user);
         $em->flush();
@@ -45,6 +46,7 @@ class LoginControllerTest extends WebTestCase
         $this->client->submitForm('Sign in', [
             '_username' => 'doesNotExist@example.com',
             '_password' => 'password',
+            '_csrf_token' => $this->client->getContainer()->getParameter('csrf_token'),
         ]);
 
         self::assertResponseRedirects('/login');
@@ -60,6 +62,7 @@ class LoginControllerTest extends WebTestCase
         $this->client->submitForm('Sign in', [
             '_username' => 'email@example.com',
             '_password' => 'bad-password',
+            '_csrf_token' => $this->client->getContainer()->getParameter('csrf_token'),
         ]);
 
         self::assertResponseRedirects('/login');
@@ -72,6 +75,7 @@ class LoginControllerTest extends WebTestCase
         $this->client->submitForm('Sign in', [
             '_username' => 'email@example.com',
             '_password' => 'password',
+            '_csrf_token' => $this->client->getContainer()->getParameter('csrf_token'),
         ]);
 
         self::assertResponseRedirects('/');

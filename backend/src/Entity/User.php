@@ -27,7 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Passwor
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    private array $roles = [];
+    protected array $roles = [];
 
     /**
      * @var string The hashed password
@@ -59,7 +59,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Passwor
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) $this->getEmail();
+    }
+
+    /**
+     * A visual identifier that represents the roles of this user.
+     */
+    public function getRole(): string
+    {
+        return substr($this->roles[0], 5);
     }
 
     /**
@@ -68,7 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Passwor
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER for students
+        // guarantee every user at least has the role ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
