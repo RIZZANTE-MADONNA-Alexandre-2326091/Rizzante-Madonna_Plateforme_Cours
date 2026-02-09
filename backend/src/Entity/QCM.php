@@ -45,9 +45,23 @@ class QCM
     #[ORM\OneToMany(targetEntity: Response::class, mappedBy: 'qcm', orphanRemoval: true)]
     private Collection $responses;
 
+    /**
+     * @var Collection<int, Video>
+     */
+    #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'qcm', orphanRemoval: true)]
+    private Collection $videos;
+
+    /**
+     * @var Collection<int, PDF>
+     */
+    #[ORM\OneToMany(targetEntity: PDF::class, mappedBy: 'qcm_id', orphanRemoval: true)]
+    private Collection $pdfs;
+
     public function __construct()
     {
         $this->responses = new ArrayCollection();
+        $this->videos = new ArrayCollection();
+        $this->pdfs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,6 +104,66 @@ class QCM
             // set the owning side to null (unless already changed)
             if ($response->getQcm() === $this) {
                 $response->setQcm(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Video>
+     */
+    public function getVideos(): Video
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): static
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos->add($video);
+            $video->setQcm($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): static
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getQcm() === $this) {
+                $video->setQcm(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PDF>
+     */
+    public function getPdfs(): Collection
+    {
+        return $this->pdfs;
+    }
+
+    public function addPdf(PDF $pdf): static
+    {
+        if (!$this->pdfs->contains($pdf)) {
+            $this->pdfs->add($pdf);
+            $pdf->setQcm($this);
+        }
+
+        return $this;
+    }
+
+    public function removePdf(PDF $pdf): static
+    {
+        if ($this->pdfs->removeElement($pdf)) {
+            // set the owning side to null (unless already changed)
+            if ($pdf->getQcm() === $this) {
+                $pdf->setQcm(null);
             }
         }
 

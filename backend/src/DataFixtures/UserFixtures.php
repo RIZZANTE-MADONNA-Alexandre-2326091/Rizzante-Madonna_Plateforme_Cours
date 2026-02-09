@@ -28,7 +28,7 @@ class UserFixtures extends Fixture
     {
         $admin = new User();
         $admin->setEmail('test.admin@mail.com');
-        $admin->setPassword(hash('crc32c', 'administrateur'));
+        $admin->setPassword(hash('sha256', 'administrateur'));
         $admin->setRoles(['ROLE_ADMIN']);
         return $admin;
     }
@@ -37,7 +37,7 @@ class UserFixtures extends Fixture
     {
         $student = new User();
         $student->setEmail('test.etudiant@mail.com');
-        $student->setPassword(hash('crc32c', 'student'));
+        $student->setPassword(hash('sha256', 'student'));
         $student->setRoles(['ROLE_STUDENT']);
         return $student;
     }
@@ -46,7 +46,7 @@ class UserFixtures extends Fixture
     {
         $teacher = new User();
         $teacher->setEmail('test.professeur@mail.com');
-        $teacher->setPassword(hash('crc32c', 'teacher'));
+        $teacher->setPassword(hash('sha256', 'teacher'));
         $teacher->setRoles(['ROLE_TEACHER']);
         return $teacher;
     }

@@ -23,7 +23,7 @@ class RegistrationFormType extends AbstractType
             ->add('agreeTerms', CheckboxType::class, [
                                 'mapped' => false,
                 'constraints' => [
-                    new IsTrue(null, 'You should agree to our terms.'),
+                    new IsTrue(null, 'Vous devez accepter les conditions d\'utilisations.'),
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
@@ -32,7 +32,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
-                    new NotBlank(null, 'Please enter a password'),
+                    new NotBlank(null, 'Veuillez entrer un mot de passe de 8 caractères'),
                     new Length(
                         null,
                         8,
@@ -41,7 +41,7 @@ class RegistrationFormType extends AbstractType
                         null,
                         null,
                         null,
-                        'Your password should be at least {{ limit }} characters',
+                        'Votre mot de passe doit faire au moins {{ limit }} caractères',
                     ),
                 ],
             ])
@@ -49,7 +49,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'choices' => ['Étudiant' => 'ROLE_STUDENT', 'Professeur' => 'ROLE_TEACHER'],
                 'constraints' => [
-                    new NotNull(null, 'Please select a role'),
+                    new NotNull(null, 'Veuillez chosir un rôle'),
                 ]
             ]);
     }

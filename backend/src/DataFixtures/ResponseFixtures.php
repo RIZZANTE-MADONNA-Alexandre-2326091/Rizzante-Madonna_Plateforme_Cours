@@ -52,7 +52,6 @@ class ResponseFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($response);
         }
         $manager->flush();
-        $manager->flush();
     }
 
     public function getDependencies(): array

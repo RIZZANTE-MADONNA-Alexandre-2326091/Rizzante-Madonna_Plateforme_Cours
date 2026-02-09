@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Plateforme de cours{% endblock %}
+
+{% block body %}
+    {% if app.user %}
+        <div class="mb-3">
+            Vous êtes connecté {{ app.user.userIdentifier }} en tant que {{ app.user.role }}, <a href="{{ logout_path() }}">Se déconnecter</a>
+        </div>
+    {% endif %}
+
+    <h1>Plateforme pour voir des cours par fichiers PDF et vidéos et réaliser des QCM.</h1>
+    <a href="{{ path('app_login') }}">Se connecter</a>
+    <a href="{{ path('app_register') }}">S'inscrire</a>
+{% endblock %}
