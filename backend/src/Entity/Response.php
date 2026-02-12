@@ -23,8 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
         new Patch(),
         new Delete()
     ],
-    normalizationContext: ['groups' => ['qcm:read']],
-    denormalizationContext: ['groups' => ['qcm:write']]
+    normalizationContext: ['groups' => ['response:read']],
+    denormalizationContext: ['groups' => ['response:write']]
 )]
 class Response
 {
@@ -38,6 +38,9 @@ class Response
 
     #[ORM\Column(length: 255)]
     private ?string $reponse = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'responses')]
     #[ORM\JoinColumn(nullable: false)]
@@ -81,6 +84,17 @@ class Response
     {
         $this->qcm = $qcm;
 
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
         return $this;
     }
 }

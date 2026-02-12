@@ -24,8 +24,8 @@ use Doctrine\ORM\Mapping as ORM;
         new Patch(),
         new Delete()
     ],
-    normalizationContext: ['groups' => ['qcm:read']],
-    denormalizationContext: ['groups' => ['qcm:write']]
+    normalizationContext: ['groups' => ['pdf:read']],
+    denormalizationContext: ['groups' => ['pdf:write']]
 )]
 #[ApiResource]
 class PDF

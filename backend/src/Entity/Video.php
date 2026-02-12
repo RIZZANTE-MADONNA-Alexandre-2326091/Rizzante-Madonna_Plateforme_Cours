@@ -24,8 +24,8 @@ use Doctrine\ORM\Mapping as ORM;
         new Patch(),
         new Delete()
     ],
-    normalizationContext: ['groups' => ['qcm:read']],
-    denormalizationContext: ['groups' => ['qcm:write']]
+    normalizationContext: ['groups' => ['video:read']],
+    denormalizationContext: ['groups' => ['video:write']]
 )]
 class Video
 {

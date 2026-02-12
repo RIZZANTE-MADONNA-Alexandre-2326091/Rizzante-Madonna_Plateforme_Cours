@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -27,13 +28,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Passwor
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    protected array $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\OneToMany(targetEntity: QCM::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $qcms;
 
     public function getId(): ?int
     {

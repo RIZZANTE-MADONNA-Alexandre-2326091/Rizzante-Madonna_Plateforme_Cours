@@ -39,6 +39,10 @@ class QCM
     #[ORM\Column]
     private ?string $nom = null;
 
+    #[ORM\ManyToOne(inversedBy: 'user')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $profile = null;
+
     /**
      * @var Collection<int, Response>
      */
@@ -54,7 +58,7 @@ class QCM
     /**
      * @var Collection<int, PDF>
      */
-    #[ORM\OneToMany(targetEntity: PDF::class, mappedBy: 'qcm_id', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: PDF::class, mappedBy: 'qcm', orphanRemoval: true)]
     private Collection $pdfs;
 
     public function __construct()
@@ -113,7 +117,7 @@ class QCM
     /**
      * @return Collection<int, Video>
      */
-    public function getVideos(): Video
+    public function getVideos(): Collection
     {
         return $this->videos;
     }
@@ -167,6 +171,20 @@ class QCM
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getProfile(): ?User
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(?User $profile): static
+    {
+        $this->profile = $profile;
         return $this;
     }
 }
