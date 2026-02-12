@@ -1,12 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Page des professeurs{% endblock %}
-
 {% block body %}
-    <h2>Liste des cours</h2>
+    <div class="container mt-5">
+        <h1 class="mb-4">Espace Enseignant</h1>
 
-    <h3>Liste des PDF</h3>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-dark text-white">Importer une ressource</div>
+                    <div class="card-body">
+                        <form action="{{ path('teacher_upload') }}" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label">Fichier (PDF ou MP4)</label>
+                                <input type="file" name="attachment" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Type de contenu</label>
+                                <select name="file_type" class="form-select">
+                                    <option value="pdf">Document PDF</option>
+                                    <option value="video">Vidéo de cours</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Uploader</button>
+                        </form>
+                    </div>
+                </div>
 
-    <h3>Liste des Vidéos</h3>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">Générer un QCM avec Mistral AI</div>
+                    <div class="card-body">
+                        <form action="{{ path('teacher_generate_qcm') }}" method="POST">
+                            <input type="text" name="qcm_name" class="form-control mb-2" placeholder="Titre du QCM" required>
+                            <textarea name="context_text" class="form-control mb-2" rows="4" placeholder="Contenu pour l'IA..."></textarea>
 
+                            <label>Lier à un PDF existant (optionnel) :</label>
+                            <select name="pdf_id" class="form-select mb-2">
+                                <option value="">Aucun lien</option>
+                                {% for pdf in pdfs %}
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="badge bg-danger">PDF</span> {{ pdf.fileName }}
+                                        </div>
+                                        <form method="POST" action="{{ path('teacher_delete_resource', {type: 'pdf', id: pdf.id}) }}" onsubmit="return confirm('Supprimer ce PDF ?');">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i> Supprimer
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endfor %}
+                            </select>
+
+                            <button type="submit" class="btn btn-outline-primary w-100">Générer Questions</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <h3>Ressources disponibles</h3>
+                <div class="list-group">
+                    {% for pdf in pdfs %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-danger">PDF</span> {{ pdf.fileName }}
+                                {% if pdf.qcm %}<small class="text-success ml-2">(Lien QCM : {{ pdf.qcm.nom }})</small>{% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {% for video in videos %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-warning text-dark">VIDEO</span> {{ video.fileName }}
+                            </div>
+                            <form method="POST" action="{{ path('teacher_delete_resource', {type: 'video', id: video.id}) }}" onsubmit="return confirm('Supprimer cette vidéo ?');">
+                                <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

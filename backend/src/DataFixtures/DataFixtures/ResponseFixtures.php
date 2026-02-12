@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\DataFixtures\DataFixtures;
 
 use App\Entity\QCM;
 use App\Entity\Response;

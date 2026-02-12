@@ -1,28 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Questionnaires{% endblock %}
-
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h2>QCM</h2>
-
-</div>
-{% endblock %}
-{% extends 'base.html.twig' %}
-
-{% block body %}
-<h1>Générateur de QCM</h1>
+<h1>Générateur de QCM Intelligent</h1>
 
 <form method="post">
-    <textarea name="content" placeholder="Collez votre paragraphe ici..." rows="10" style="width: 100%"></textarea>
-    <button type="submit">Générer le QCM</button>
+    <textarea name="content" placeholder="Collez votre texte ici..." rows="6" class="form-control" required></textarea>
+
+    <div class="mt-2">
+        <label><input type="number" name="nombreQuestions" placeholder="Entrez le nombre de questions (par défaut 10)" checked></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Générer</button>
 </form>
 
-
-<hr>
+{% if qcm %}
+    <div class="results mt-4">
+        {% for item in qcm %}
+            <div class="card mb-3 p-3">
+                <p><strong>Q{{ loop.index }}: {{ item.question }}</strong></p>
+                <ul>
+                    {% for option in item.options %}
+                        <li>{{ option }}</li>
+                    {% endfor %}
+                </ul>
+                <p class="text-success">Réponse : {{ item.reponse }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
 {% endblock %}

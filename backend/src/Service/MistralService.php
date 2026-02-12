@@ -17,16 +17,27 @@ class MistralService
         private string $mistralApiKey
     ) {}
 
-    public function generateTrueFalseQcm(string $paragraph): array
+    public function generateQcm(string $paragraph, int $nbQuestions): array
     {
-        $prompt = <<<PROMPT
-        À partir du paragraphe suivant, génère 5 questions de type Vrai/Faux
-        Paragraphe:
-        {$paragraph}
+        $instruction = "{$nbQuestions} questions à choix multiples (QCM) avec 4 options par question ou questions de type Vrai/Faux.";
 
-        Format attendu (JSON uniquement):
-        Question et Réponse(s)
+        $prompt = <<<PROMPT
+        À partir du paragraphe suivant, génère {$instruction}
+        
+        Paragraphe: "{$paragraph}"
+
+        Format attendu (JSON strict) :
+        [
+          {
+            "question": "Texte de la question",
+            "options": ["choix A", "choix B", "choix C", "choix D"],
+            "reponse": "La bonne réponse" OU ["Bonne réponse 1", "Bonne réponse 2", ...]
+          }
+        ]
+        (Pour les choix multiples, plusieurs peuvent être justes, ou une seule, mais jamais que des des réponses justes ou aucune)
+        (Pour le vrai/faux, les options doivent être ["Vrai", "Faux"])
         PROMPT;
+
         try {
             $response = $this->httpClient->request('POST', self::MISTRAL_API_URL, [
                 'headers' => [
@@ -35,41 +46,22 @@ class MistralService
                 ],
                 'json' => [
                     'model' => 'mistral-small-latest',
-                    'messages' => [
-                        [
-                            'role' => 'user',
-                            'content' => $prompt,
-                        ],
-                    ],
-                    'temperature' => 0.3,
+                    'messages' => [['role' => 'user', 'content' => $prompt]],
+                    'temperature' => 0.2, // Plus bas pour plus de rigueur sur le format
+                    'response_format' => ['type' => 'json_object'] // Force le format JSON si supporté
                 ],
             ]);
 
-            $data = $response->toArray(false);
-
-            if (!isset($data['choices'][0]['message']['content'])) {
-                throw new RuntimeException('Réponse Mistral invalide');
-            }
-
+            $data = $response->toArray();
             $content = $data['choices'][0]['message']['content'];
 
-            $decoded = json_decode($content, true);
+            // Petit nettoyage au cas où Mistral ajoute du Markdown
+            $content = str_replace(['```json', '```'], '', $content);
 
-            if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
-                throw new RuntimeException('JSON invalide retourné par Mistral');
-            }
+            return json_decode($content, true);
 
-            return $decoded;
-
-        } catch (
-        TransportExceptionInterface |
-        ClientExceptionInterface |
-        ServerExceptionInterface $e
-        ) {
-            throw new \RuntimeException(
-                'Erreur lors de l’appel à l’API Mistral : ' . $e->getMessage()
-            );
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Erreur API Mistral : ' . $e->getMessage());
         }
-
     }
 }
