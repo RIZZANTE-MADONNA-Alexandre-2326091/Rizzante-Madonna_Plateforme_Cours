@@ -42,7 +42,7 @@ class PDF
     private mixed $file = null;
 
     #[ORM\ManyToOne(inversedBy: 'pdfs')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?QCM $qcm = null;
 
     public function getId(): ?int

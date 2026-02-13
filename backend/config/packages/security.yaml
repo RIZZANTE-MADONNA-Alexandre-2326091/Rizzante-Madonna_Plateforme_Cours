@@ -44,7 +44,7 @@ security:
     access_control:
         - { path: '^/login', roles: PUBLIC_ACCESS }
         - { path: '^/register', roles: PUBLIC_ACCESS }
-        - { path: '^/teacher', roles: PUBLIC_TEACHER }
+        - { path: '^/teacher', roles: ROLE_TEACHER }
         - { path: '^/student', roles: ROLE_STUDENT }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

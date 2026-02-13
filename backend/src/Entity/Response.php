@@ -43,7 +43,7 @@ class Response
     private ?string $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'responses')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?QCM $qcm = null;
 
     public function getId(): ?int

@@ -21,7 +21,7 @@ class TeacherController extends AbstractController
     #[Route('/teacher', name: 'teacher_dashboard')]
     public function index(EntityManagerInterface $em): Response
     {
-        return $this->render('teacher/index.html.twig', [
+        return $this->render('teacher/teacher.html.twig', [
             'pdfs' => $em->getRepository(PDF::class)->findAll(),
             'videos' => $em->getRepository(Video::class)->findAll(),
             'qcms' => $em->getRepository(QCM::class)->findAll(),
@@ -99,7 +99,7 @@ class TeacherController extends AbstractController
         return $this->redirectToRoute('teacher_dashboard');
     }
 
-    #[Route('/teacher/delete/{type}/{id}', name: 'teacher_delete_resource', methods: ['POST', 'DELETE'])]
+    #[Route('/teacher/delete/{type}/{id}', name: 'teacher_delete_resource', methods: ['DELETE'])]
     public function deleteResource(string $type, int $id, EntityManagerInterface $em): Response
     {
         // On détermine quelle entité chercher selon le type passé dans l'URL

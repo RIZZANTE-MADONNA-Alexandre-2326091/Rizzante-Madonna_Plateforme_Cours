@@ -41,7 +41,7 @@ class Video
     private mixed $file = null;
 
     #[ORM\ManyToOne(inversedBy: 'video')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?QCM $qcm = null;
 
     public function getId(): ?int

@@ -40,7 +40,7 @@ class QCM
     private ?string $nom = null;
 
     #[ORM\ManyToOne(inversedBy: 'user')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $profile = null;
 
     /**
